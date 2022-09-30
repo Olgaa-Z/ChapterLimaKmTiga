@@ -2,7 +2,15 @@ package coding.withze.chapterlimakmtiga
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import coding.withze.chapterlimakmtiga.adapter.CarAdapter
 import coding.withze.chapterlimakmtiga.databinding.ActivityListCarBinding
+import coding.withze.chapterlimakmtiga.model.ResponseDatacarItem
+import coding.withze.chapterlimakmtiga.network.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ListCarActivity : AppCompatActivity() {
 
@@ -11,5 +19,31 @@ class ListCarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListCarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        showDataCar()
     }
+
+
+    fun  showDataCar(){
+        RetrofitClient.instance.getAllCar()
+            .enqueue(object  : Callback<List<ResponseDatacarItem>>{
+                override fun onResponse(
+                    call: Call<List<ResponseDatacarItem>>,
+                    response: Response<List<ResponseDatacarItem>>
+                ) {
+                    if (response.isSuccessful){
+                        binding.rvCar.layoutManager = LinearLayoutManager(this@ListCarActivity, LinearLayoutManager.VERTICAL, false)
+                        binding.rvCar.adapter = CarAdapter(response.body()!!)
+                    }else{
+                        Toast.makeText(this@ListCarActivity, "Load Data Failed", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+                override fun onFailure(call: Call<List<ResponseDatacarItem>>, t: Throwable) {
+                    Toast.makeText(this@ListCarActivity, "Something Wrong", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+    }
+
 }

@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coding.withze.chapterlimakmtiga.databinding.ItemCarBinding
+import coding.withze.chapterlimakmtiga.model.ResponseDatacarItem
 
-class CarAdapter():RecyclerView.Adapter<CarAdapter.ViewHolder>() {
+class CarAdapter(var listCar : List<ResponseDatacarItem>):RecyclerView.Adapter<CarAdapter.ViewHolder>() {
+
     class ViewHolder(var binding : ItemCarBinding):RecyclerView.ViewHolder(binding.root) {
 
     }
@@ -16,10 +18,12 @@ class CarAdapter():RecyclerView.Adapter<CarAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CarAdapter.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.binding.nameCar.text = listCar[position].name
+        holder.binding.categoryCar.text = listCar[position].category
+        holder.binding.priceCar.text = listCar[position].price.toString()
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+       return listCar.size
     }
 }
